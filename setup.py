@@ -41,7 +41,7 @@ except ImportError:
 # to this sample package.
 setup(
     name='picaso', 
-    version = '3.2.2',
+    version = '3.3',
     description = 'planetary intesity code for atmospheric scattering observations',
     long_description = 'README.md',
     author = 'Natasha E. Batalha',
@@ -71,7 +71,7 @@ setup(
           'pysynphot',
           'sphinx',
           'scipy',
-          'virga-exo==0.4',
+          'virga-exo==0.5',
           'xarray',
           'bibtexparser',
           'netcdf4', 
