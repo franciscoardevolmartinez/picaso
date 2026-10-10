@@ -1527,12 +1527,22 @@ def setup_spectrum_class(config, opacity, param_tools, stage=None):
     phase_kwargs = config['geometry'].get('phase_kwargs', {})
     A.phase_angle(rad,**phase_kwargs) #input the radian angle of the event/geometry of browndwarf/planet
 
-    A.gravity(gravity     = config['object'].get('gravity', {}).get('value',None), 
-            gravity_unit= u.Unit(config['object'].get('gravity', {}).get('unit',None)), 
-            radius      = config['object'].get('radius', {}).get('value',None), 
+    gravity_value = config['object'].get('gravity', {}).get('value', None)
+    mass_value = config['object'].get('mass', {}).get('value', None)
+    # ``inputs.gravity`` gives mass+radius precedence when all three are
+    # supplied. In a retrieval that silently makes object.gravity.value a
+    # no-op and leaves its posterior equal to the prior. An explicit gravity
+    # must therefore take precedence here; mass+radius remains the fallback
+    # when gravity is absent.
+    if gravity_value is not None:
+        mass_value = None
+
+    A.gravity(gravity     = gravity_value,
+            gravity_unit= u.Unit(config['object'].get('gravity', {}).get('unit',None)),
+            radius      = config['object'].get('radius', {}).get('value',None),
             radius_unit = u.Unit(config['object'].get('radius', {}).get('unit',None)),
-            mass        = config['object'].get('mass', {}).get('value',None), 
-            mass_unit   = u.Unit(config['object'].get('mass', {}).get('unit',None)) 
+            mass        = mass_value,
+            mass_unit   = u.Unit(config['object'].get('mass', {}).get('unit',None))
             )
 
     if stage == 'object':
